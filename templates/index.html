@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap">
+    <style>
+        body {
+            background-image: url('https://media.nbcsandiego.com/2022/09/GettyImages-1023139716-e1664130625212.jpg?quality=85&amp;strip=all&amp;resize=1200%2C675');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Weather Forecast</h1>
+         <form method="post" class="my-4">
+    <div class="form-row">
+        <div class="col-3.5">
+            <label for="city" class="sr-only">Enter City:</label>
+            <input type="text" id="city" name="city" class="form-control" placeholder="City" required>
+        </div>
+        <div class="col-1.5">
+            <button type="submit" class="btn btn-primary btn-block">Get Weather</button>
+        </div>
+    </div>
+</form>
+        <!-- Example Cities -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Example Cities</h5>
+                <p class="card-text">Try these examples: London, New York, Tokyo</p>
+            </div>
+        </div>
+        <!-- End of Example Cities -->
+        <!-- Search History -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Search History:</h5>
+                <ul class="list-group">
+            {% for item in search_history %}
+                <li class="list-group-item">{{ item }}</li>
+            {% endfor %}
+        </ul>
+            </div>
+        </div>
+
+        <!-- End of Search History -->
+        {% if error_message %}
+            <div class="alert alert-danger" role="alert">{{ error_message }}</div>
+        {% endif %}
+        <!-- Current Weather section -->
+{% if weather_info %}
+    <div class="card my-4">
+        <div class="card-body">
+            <h2 class="card-title">Weather Information for {{ weather_info.city }}</h2>
+            <!-- Weather icon using FontAwesome for description -->
+            <p class="card-text" style="color: {% if weather_info.temperature <= 0 %}#007BFF{% else %}#f27e35{% endif %}">
+                <i class="fas fa-thermometer-half"></i> Temperature: {{ weather_info.temperature }} °C
+            </p>
+            <p class="card-text">
+                <i class="fas fa-cloud"></i> Description: {{ weather_info.description }}
+            </p>
+            <p class="card-text" style="color: {% if weather_info.min_temperature <= 0 %}#007BFF{% else %}#f27e35{% endif %}">
+                <i class="fas fa-thermometer-empty"></i> Min Temperature: {{ weather_info.min_temperature }} °C
+            </p>
+            <p class="card-text" style="color: {% if weather_info.max_temperature <= 0 %}#007BFF{% else %}#f27e35{% endif %}">
+                <i class="fas fa-thermometer-full"></i> Max Temperature: {{ weather_info.max_temperature }} °C
+            </p>
+            <p class="card-text">
+                <i class="fas fa-tint"></i> Humidity: {{ weather_info.humidity }}%
+            </p>
+            <p class="card-text">
+                <i class="fas fa-wind"></i> Wind Speed: {{ weather_info.wind_speed }} m/s
+            </p>
+            <p class="card-text">
+                <i class="fas fa-tachometer-alt"></i> Atmospheric Pressure: {{ weather_info.pressure }} hPa
+            </p>
+        </div>
+    </div>
+{% endif %}
+<!-- End of Current Weather section -->
+
+        <!-- Hourly Forecast section -->
+{% if hourly_forecast %}
+    <div class="card my-4">
+        <div class="card-body">
+            <h2 class="card-title">Hourly Forecast for Today</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><i class="far fa-calendar-alt"></i> Date</th>
+                        <th><i class="far fa-clock"></i> Time</th>
+                        <th>
+                            <i class="fas fa-thermometer-half"></i> Temperature (°C)
+                        </th>
+                        <th>
+                            <i class="fas fa-cloud"></i> Description
+                        </th>
+                        <th>
+                            <i class="fas fa-icon"></i> Weather Icon
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hour in hourly_forecast %}
+                        <tr>
+                            <td>{{ hour.date }}</td>
+                            <td>{{ hour.time }}</td>
+                            <td style="color: {% if hour.temperature <= 0 %}#007BFF{% else %}#f27e35{% endif %}">
+                                {{ hour.temperature }}
+                            </td>
+                            <td>{{ hour.description }}</td>
+                            <!-- Weather icon using FontAwesome -->
+                            <td>{% if 'cloud' in hour.description.lower() %}
+                                    <i class="fas fa-cloud"></i>
+                                {% elif 'sun' in hour.description.lower() or 'clear' in hour.description.lower() %}
+                                    <i class="fas fa-sun"></i>
+                                {% elif 'rain' in hour.description.lower() %}
+                                    <i class="fas fa-cloud-showers-heavy"></i>
+                                {% elif 'snow' in hour.description.lower() %}
+                                    <i class="fas fa-snowflake"></i>
+                                {% else %}
+                                    <!-- Default icon if the description doesn't match any condition -->
+                                    <i class="fas fa-question"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}
+<!-- End of Hourly Forecast section -->
+
+       <!-- Daily Forecast section -->
+{% if daily_forecast %}
+    <div id="dailyForecastCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for day in daily_forecast %}
+                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                    <div class="card daily-forecast">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ day.date }}</h5>
+                            <!-- Weather icon using FontAwesome -->
+                            <i class="{{ day.icon_class }}"></i>
+                            <p class="card-text" style="color: {% if day.max_temperature <= 0 %}#007BFF{% else %}#f27e35{% endif %}">
+                                Max: {{ day.max_temperature }} °C
+                            </p>
+                            <p class="card-text" style="color: {% if day.min_temperature <= 0 %}#007BFF{% else %}#f27e35{% endif %}">
+                                Min: {{ day.min_temperature }} °C
+                            </p>
+                            <p class="card-text">{{ day.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#dailyForecastCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#dailyForecastCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+{% endif %}
+<!-- End of Daily Forecast section -->
+
+
+    </div>
+    <!-- Bootstrap JS and Popper.js CDN) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

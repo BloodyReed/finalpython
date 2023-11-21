@@ -1,0 +1,43 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.card {
+    background-color: transparent; /* Прозрачный фон для карточек */
+    border: 1px solid #fff; /* Белая рамка для карточек */
+}
+
+.jumbotron {
+    background-color: rgba(255, 255, 255, 0.7); /* Прозрачно-белый фон для jumbotron */
+    padding: 20px;
+   border-radius: 30px
+}
+
+.display-4 {
+    text-align: center
+}
+/* Add styles for Daily Forecast Cards in Grid Layout */
+.card.daily-forecast {
+    margin-bottom: 20px;
+
+}
+
+.card.daily-forecast .card-body {
+    text-align: center;
+}
+
+.card.daily-forecast h5 {
+    font-size: 1.2rem;
+}
+
+.card.daily-forecast p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+/* Button Styles */
+.btn-primary {
+    background-color: #007bff; /* blue color */
+    border-color: #007bff;
+    border-radius: 15px;
+
+}
