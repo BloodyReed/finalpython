@@ -5,6 +5,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+  - [API](#Change-API)
 - [API Documentation](#api-documentation)
 - [Configuration](#configuration)
 - [License](#license)
@@ -28,23 +29,23 @@ This project is a simple weather forecast application built with Python using th
    git clone https://github.com/BloodyReed/finalpython.git
    cd finalpython
 
-**Configure your OpenWeather API key:**
+### Change-API
 Open the main.py file.
 Replace value in '' with your actual API key.
 
-**API Documentation**
+### API-Documentation
 For detailed information on the OpenWeather API, refer to the OpenWeather API Documentation.
 
-**Configuration**
+### Configuration
 In the main.py file, you can configure additional settings such as units (imperial or metric) and language.
 
-**License**
+### License
 This project is licensed under the Astana IT University License.
 
-**Acknowledgments**
+### Acknowledgments
 Flask: https://flask.palletsprojects.com/
 Bootstrap: https://getbootstrap.com/
 OpenWeather API: https://openweathermap.org/
 
-**Contact Information**
+### Contact-Information
 For questions or feedback, feel free to contact us at 220347@astanait.edu.kz, 221090@astanait.edu.kz, 220042@astanait.edu.kz
