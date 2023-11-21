@@ -47,5 +47,5 @@ This project is a simple weather forecast application built with Python using th
 - Bootstrap: https://getbootstrap.com/
 - OpenWeather API: https://openweathermap.org/
 
-## contact-information
+## Contact Information
 - For questions or feedback, feel free to contact us at 220347@astanait.edu.kz, 221090@astanait.edu.kz, 220042@astanait.edu.kz
